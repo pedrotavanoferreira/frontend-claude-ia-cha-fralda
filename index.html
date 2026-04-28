@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chá de Fralda do Miguel 🦁</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Raleway:wght@300;400;600;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --savanna:   #c8861a;
+      --gold:      #e8a825;
+      --amber:     #f5c842;
+      --earth:     #7a4018;
+      --soil:      #3d1f08;
+      --dusk:      #1a0e05;
+      --sky-burn:  #e05a1a;
+      --green:     #4a7c3f;
+      --cream:     #fdf3e0;
+      --sand:      #f2ddb0;
+      --text:      #2a1205;
+      --muted:     #8a6040;
+      --white:     #fff8f0;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Raleway', sans-serif;
+      background: var(--dusk);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ───── CURSOR ───── */
+    * { cursor: none !important; }
+    #cursor {
+      position: fixed; width:18px; height:18px;
+      background: var(--amber); border-radius:50%;
+      pointer-events:none; z-index:99999;
+      transform:translate(-50%,-50%);
+      transition: transform 0.1s, background 0.2s;
+      mix-blend-mode: difference;
+    }
+
+    /* ───── STARS / FIREFLIES ───── */
+    .fireflies {
+      position: fixed; inset:0;
+      pointer-events:none; z-index:0; overflow:hidden;
+    }
+    .fly {
+      position:absolute; border-radius:50%;
+      background: radial-gradient(circle, #f5c84280, transparent 70%);
+      animation: flyFloat linear infinite;
+    }
+    @keyframes flyFloat {
+      0%   { transform:translateY(100vh) translateX(0) scale(0.5); opacity:0; }
+      10%  { opacity:1; }
+      90%  { opacity:0.7; }
+      100% { transform:translateY(-20vh) translateX(var(--drift)) scale(1.2); opacity:0; }
+    }
+
+    /* ───── HERO ───── */
+    .hero {
+      position: relative; z-index:2;
+      min-height: 100vh;
+      display: flex; flex-direction:column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 100%, #7a401860 0%, transparent 70%),
+        radial-gradient(ellipse 100% 80% at 50% 120%, #e05a1a30 0%, transparent 60%),
+        linear-gradient(180deg, #050200 0%, #0d0500 30%, #1a0a02 60%, #2a1205 100%);
+    }
+
+    /* SVG Savanna silhouette */
+    .savanna-silhouette {
+      position:absolute; bottom:0; left:0; right:0;
+      width:100%; z-index:1; pointer-events:none;
+    }
+
+    /* Stars */
+    .stars-layer {
+      position:absolute; inset:0; z-index:0;
+      background-image:
+        radial-gradient(1px 1px at 10% 15%, #fff9 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 8%,  #fff7 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 40% 20%, #fffa 0%, transparent 100%),
+        radial-gradient(1px 1px at 60% 5%,  #fff8 0%, transparent 100%),
+        radial-gradient(2px 2px at 75% 12%, #fff6 0%, transparent 100%),
+        radial-gradient(1px 1px at 85% 22%, #fff9 0%, transparent 100%),
+        radial-gradient(1px 1px at 5%  35%, #fff5 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 90% 40%, #fffa 0%, transparent 100%),
+        radial-gradient(1px 1px at 50% 30%, #fff7 0%, transparent 100%),
+        radial-gradient(1px 1px at 20% 45%, #fff6 0%, transparent 100%),
+        radial-gradient(2px 2px at 65% 28%, #fff8 0%, transparent 100%),
+        radial-gradient(1px 1px at 35% 50%, #fff5 0%, transparent 100%);
+    }
+
+    /* Moon */
+    .moon {
+      position:absolute; top:60px; right:12%;
+      width:80px; height:80px; border-radius:50%;
+      background: radial-gradient(circle at 35% 35%, #fff8e0, #f5c842 50%, #c8861a);
+      box-shadow: 0 0 40px 15px #f5c84240, 0 0 80px 30px #e8a82520;
+      z-index:1;
+      animation: moonGlow 4s ease-in-out infinite;
+    }
+    @keyframes moonGlow {
+      0%,100% { box-shadow: 0 0 40px 15px #f5c84240, 0 0 80px 30px #e8a82520; }
+      50%     { box-shadow: 0 0 60px 25px #f5c84260, 0 0 120px 50px #e8a82535; }
+    }
+
+    .hero-content {
+      position: relative; z-index:3;
+      padding: 0 24px;
+      display: flex; flex-direction:column; align-items:center;
+      margin-bottom: 200px;
+    }
+
+    .hero-eyebrow {
+      display: flex; align-items: center; gap:10px;
+      background: linear-gradient(135deg, #3d1f0880, #7a401870);
+      border: 1px solid #e8a82550;
+      backdrop-filter: blur(8px);
+      color: var(--amber);
+      font-size: 11px; font-weight:800;
+      letter-spacing: 3px; text-transform:uppercase;
+      padding: 8px 22px; border-radius:99px;
+      margin-bottom: 24px;
+      animation: fadeDown 0.8s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(54px, 11vw, 110px);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing:-2px;
+      color: var(--cream);
+      text-shadow: 0 4px 40px #c8861a60;
+      animation: fadeDown 0.9s ease 0.1s both;
+    }
+    .hero h1 .name-highlight {
+      display: block;
+      font-style: italic;
+      background: linear-gradient(135deg, var(--gold), var(--amber), var(--sky-burn));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 2px 20px #e8a82580);
+    }
+
+    .hero-animals {
+      display: flex; gap:16px; margin: 28px 0;
+      font-size: 42px;
+      animation: fadeDown 1s ease 0.25s both;
+    }
+    .hero-animals span {
+      display:inline-block;
+      animation: animalBob 2.5s ease-in-out infinite;
+      filter: drop-shadow(0 4px 12px #00000080);
+    }
+    .hero-animals span:nth-child(2) { animation-delay:.3s; }
+    .hero-animals span:nth-child(3) { animation-delay:.6s; }
+    .hero-animals span:nth-child(4) { animation-delay:.9s; }
+    .hero-animals span:nth-child(5) { animation-delay:1.2s; }
+
+    @keyframes animalBob {
+      0%,100% { transform:translateY(0) rotate(0deg); }
+      50%     { transform:translateY(-10px) rotate(3deg); }
+    }
+
+    .hero-sub {
+      font-size: clamp(15px, 2.5vw, 20px);
+      color: #c8a070;
+      letter-spacing: 1px;
+      margin-top: 6px;
+      animation: fadeDown 1s ease 0.35s both;
+    }
+
+    .scroll-hint {
+      position:absolute; bottom: 210px; left:50%; transform:translateX(-50%);
+      z-index:3; display:flex; flex-direction:column; align-items:center; gap:6px;
+      color:#7a6040; font-size:11px; letter-spacing:2px; text-transform:uppercase;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+    @keyframes fadeDown {
+      from { opacity:0; transform:translateY(-20px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ───── INFO SECTION ───── */
+    .info-section {
+      position:relative; z-index:2;
+      background: linear-gradient(180deg, #2a1205 0%, #3d1f08 100%);
+      padding: 70px 24px 80px;
+    }
+    .info-section::before {
+      content:'';
+      position:absolute; inset:0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8861a' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events:none;
+    }
+
+    .section-label {
+      text-align:center;
+      font-size:11px; font-weight:800; letter-spacing:4px; text-transform:uppercase;
+      color: var(--savanna); margin-bottom:12px;
+    }
+    .section-heading {
+      text-align:center;
+      font-family:'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 44px);
+      color: var(--cream);
+      margin-bottom: 48px;
+    }
+    .section-heading em { color:var(--amber); font-style:italic; }
+
+    .cards-grid {
+      display:flex; gap:20px; flex-wrap:wrap; justify-content:center;
+      max-width:900px; margin:0 auto;
+    }
+
+    .info-card {
+      background: linear-gradient(145deg, #4a220a, #3a1808);
+      border: 1px solid #c8861a30;
+      border-radius: 20px;
+      padding: 32px 28px;
+      flex:1; min-width:200px; max-width:260px;
+      text-align:center;
+      position:relative; overflow:hidden;
+      transition: transform 0.35s, box-shadow 0.35s;
+    }
+    .info-card::before {
+      content:'';
+      position:absolute; inset:0;
+      background: radial-gradient(circle at 50% 0%, #e8a82512, transparent 70%);
+      pointer-events:none;
+    }
+    .info-card:hover {
+      transform:translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 50px #c8861a30;
+    }
+    .info-card .card-icon {
+      font-size:40px; margin-bottom:12px;
+      filter: drop-shadow(0 4px 8px #00000060);
+    }
+    .info-card .card-label {
+      font-size:10px; font-weight:800; letter-spacing:2.5px;
+      text-transform:uppercase; color:var(--savanna); margin-bottom:8px;
+    }
+    .info-card .card-value {
+      font-family:'Playfair Display', serif;
+      font-size:22px; color:var(--cream); font-weight:700;
+    }
+    .info-card .card-sub {
+      font-size:13px; color:#a07858; margin-top:4px;
+    }
+
+    /* ───── FORM SECTION ───── */
+    .form-section {
+      position:relative; z-index:2;
+      background: linear-gradient(180deg, #3d1f08 0%, #1a0e05 100%);
+      padding: 80px 24px 100px;
+    }
+    .form-section::after {
+      content:'';
+      position:absolute; inset:0;
+      background-image: radial-gradient(circle at 20% 50%, #c8861a08 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, #e05a1a06 0%, transparent 50%);
+      pointer-events:none;
+    }
+
+    .counter-wrap { text-align:center; margin-bottom:40px; }
+    .counter-pill {
+      display:inline-flex; align-items:center; gap:10px;
+      background: linear-gradient(135deg, #7a4018, #c8861a);
+      color: var(--cream);
+      padding: 12px 28px; border-radius:99px;
+      font-size:14px; font-weight:700;
+      box-shadow: 0 8px 28px #c8861a40;
+      border: 1px solid #e8a82540;
+    }
+    .counter-pill .num {
+      font-family:'Playfair Display', serif;
+      font-size:26px; color:var(--amber);
+    }
+
+    .form-card {
+      max-width:580px; margin:0 auto;
+      background: linear-gradient(160deg, #3a1a06, #2a1205);
+      border: 1px solid #c8861a25;
+      border-radius:28px;
+      padding: 52px 48px;
+      box-shadow: 0 30px 80px #00000070;
+      position:relative; overflow:hidden;
+      z-index:1;
+    }
+    .form-card::before {
+      content:'';
+      position:absolute; top:0; left:0; right:0; height:3px;
+      background: linear-gradient(90deg, transparent, var(--gold), var(--sky-burn), transparent);
+    }
+    .form-card::after {
+      content:'';
+      position:absolute; inset:0;
+      background: radial-gradient(circle at 80% 10%, #e8a82508, transparent 60%);
+      pointer-events:none;
+    }
+
+    .form-group { margin-bottom:26px; position:relative; }
+    .form-group label {
+      display:block;
+      font-size:10px; font-weight:800; letter-spacing:2px;
+      text-transform:uppercase; color:var(--savanna);
+      margin-bottom:10px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width:100%;
+      background: #1a0a0280;
+      border: 1.5px solid #c8861a30;
+      border-radius:12px;
+      padding: 15px 18px;
+      font-family:'Raleway', sans-serif;
+      font-size:15px; color: var(--cream);
+      outline:none;
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color:#7a5030; }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--savanna);
+      box-shadow: 0 0 0 4px #c8861a18;
+      background: #1a0a0260;
+    }
+    .form-group select { appearance:none; cursor:pointer; }
+    .form-group select option { background:#2a1205; }
+    .form-group textarea { resize:vertical; min-height:100px; }
+
+    .radio-group { display:flex; gap:12px; flex-wrap:wrap; }
+    .radio-option { flex:1; min-width:120px; }
+    .radio-option input[type="radio"] { display:none; }
+    .radio-option label {
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      padding: 15px 12px;
+      border: 1.5px solid #c8861a30;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:14px; font-weight:700;
+      color:#a07058; letter-spacing:0.5px;
+      background: #1a0a0260;
+      transition: all 0.25s;
+      text-transform:none;
+    }
+    .radio-option input[type="radio"]:checked + label {
+      border-color: var(--savanna);
+      background: linear-gradient(135deg, #7a401850, #c8861a30);
+      color: var(--amber);
+      box-shadow: 0 4px 20px #c8861a25;
+    }
+    .radio-option label:hover { border-color:#c8861a60; color:var(--cream); }
+
+    .submit-btn {
+      width:100%; margin-top:10px;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--earth), var(--savanna), var(--gold));
+      background-size: 200% 200%;
+      animation: gradShift 4s ease infinite;
+      color: var(--soil);
+      font-family:'Raleway', sans-serif;
+      font-size:16px; font-weight:800;
+      letter-spacing:1.5px; text-transform:uppercase;
+      border:none; border-radius:14px;
+      cursor:pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 10px 34px #c8861a45;
+      position:relative; overflow:hidden;
+    }
+    .submit-btn::before {
+      content:'';
+      position:absolute; inset:0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.15), transparent);
+      pointer-events:none;
+    }
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 44px #c8861a55;
+    }
+    .submit-btn:active { transform:translateY(0); }
+
+    @keyframes gradShift {
+      0%,100% { background-position:0% 50%; }
+      50%     { background-position:100% 50%; }
+    }
+
+    /* ───── SUCCESS ───── */
+    .success-msg {
+      display:none; text-align:center;
+      padding: 52px 32px;
+      animation: popIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    .success-msg .big-emoji { font-size:80px; margin-bottom:16px; }
+    .success-msg h2 {
+      font-family:'Playfair Display', serif;
+      font-size:34px; color:var(--amber); margin-bottom:12px;
+    }
+    .success-msg p { color:#a08060; font-size:16px; line-height:1.7; }
+    .success-msg p strong { color:var(--cream); }
+
+    @keyframes popIn {
+      from { opacity:0; transform:scale(0.7) rotate(-3deg); }
+      to   { opacity:1; transform:scale(1) rotate(0deg); }
+    }
+
+    /* ───── FOOTER ───── */
+    footer {
+      position:relative; z-index:2;
+      background: var(--dusk);
+      text-align:center; padding:36px 24px;
+      color:#4a3020; font-size:13px; font-weight:600;
+      border-top: 1px solid #c8861a15;
+    }
+    footer span { color:#7a5030; }
+
+    /* ───── DECORATIVE DIVIDERS ───── */
+    .paw-divider {
+      display:flex; align-items:center; justify-content:center;
+      gap:14px; padding: 0 24px;
+    }
+    .paw-divider::before, .paw-divider::after {
+      content:''; flex:1; height:1px;
+      background: linear-gradient(90deg, transparent, #c8861a40, transparent);
+    }
+    .paw-divider span { font-size:18px; }
+
+    @media (max-width:600px) {
+      .form-card { padding:32px 22px; }
+      .hero h1 { letter-spacing:-1px; }
+      .moon { width:55px; height:55px; right:5%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cursor"></div>
+
+  <!-- Fireflies -->
+  <div class="fireflies" id="fireflies"></div>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero">
+    <div class="stars-layer"></div>
+    <div class="moon"></div>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">🌍 Bem-vindo à Savana do Miguel 🌍</div>
+      <h1>
+        Chá de Fralda
+        <span class="name-highlight">do Miguel</span>
+      </h1>
+      <div class="hero-animals">
+        <span>🦁</span>
+        <span>🐘</span>
+        <span>🦒</span>
+        <span>🦓</span>
+        <span>🐆</span>
+      </div>
+      <p class="hero-sub">Uma aventura na savana para celebrar a chegada do nosso leãozinho</p>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Role para baixo</span>
+      <svg width="20" height="28" viewBox="0 0 20 28" fill="none">
+        <rect x="7" y="0" width="6" height="14" rx="3" fill="#7a6040"/>
+        <path d="M3 18 L10 25 L17 18" stroke="#7a6040" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <!-- Savanna Silhouette SVG -->
+    <svg class="savanna-silhouette" viewBox="0 0 1440 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stop-color="#e05a1a" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#c8861a" stop-opacity="0.2"/>
+        </linearGradient>
+      </defs>
+      <!-- Ground -->
+      <path d="M0,180 Q180,160 360,170 Q540,180 720,165 Q900,150 1080,168 Q1260,186 1440,170 L1440,220 L0,220 Z" fill="#2a1205"/>
+      <!-- Grass tufts -->
+      <g fill="#3d1f08">
+        <path d="M50,180 Q52,165 54,180 Q56,165 58,180"/>
+        <path d="M100,175 Q103,158 106,175 Q109,158 112,175"/>
+        <path d="M200,172 Q202,160 204,172 Q206,160 208,172"/>
+        <path d="M350,178 Q353,163 356,178 Q359,163 362,178"/>
+        <path d="M500,170 Q503,155 506,170 Q509,155 512,170"/>
+        <path d="M680,168 Q683,152 686,168 Q689,152 692,168"/>
+        <path d="M850,172 Q853,158 856,172 Q859,158 862,172"/>
+        <path d="M1000,175 Q1003,160 1006,175 Q1009,160 1012,175"/>
+        <path d="M1200,170 Q1203,155 1206,170 Q1209,155 1212,170"/>
+        <path d="M1380,175 Q1383,162 1386,175 Q1389,162 1392,175"/>
+      </g>
+      <!-- Acacia tree 1 -->
+      <g transform="translate(160,90)">
+        <rect x="8" y="70" width="8" height="40" fill="#1a0a02"/>
+        <ellipse cx="12" cy="68" rx="38" ry="18" fill="#2a4a1a"/>
+        <ellipse cx="-10" cy="62" rx="24" ry="14" fill="#2a4a1a"/>
+        <ellipse cx="34" cy="64" rx="22" ry="13" fill="#2a4a1a"/>
+        <ellipse cx="12" cy="55" rx="28" ry="14" fill="#3a5a22"/>
+      </g>
+      <!-- Acacia tree 2 -->
+      <g transform="translate(1050,75)">
+        <rect x="8" y="80" width="7" height="50" fill="#1a0a02"/>
+        <ellipse cx="11" cy="78" rx="45" ry="20" fill="#2a4a1a"/>
+        <ellipse cx="-15" cy="72" rx="26" ry="15" fill="#2a4a1a"/>
+        <ellipse cx="38" cy="74" rx="24" ry="14" fill="#2a4a1a"/>
+        <ellipse cx="11" cy="60" rx="32" ry="16" fill="#3a5a22"/>
+      </g>
+      <!-- Giraffe silhouette -->
+      <g transform="translate(760,40)" fill="#1a0a02">
+        <rect x="18" y="120" width="5" height="40" rx="2"/>
+        <rect x="28" y="120" width="5" height="40" rx="2"/>
+        <rect x="38" y="125" width="5" height="35" rx="2"/>
+        <rect x="48" y="125" width="5" height="35" rx="2"/>
+        <path d="M18,120 Q20,90 28,60 Q30,40 32,20 L36,20 Q38,40 40,60 Q48,90 50,120 Z"/>
+        <path d="M32,20 L32,5 Q33,0 35,5 L35,20 Z"/>
+        <ellipse cx="34" cy="8" rx="6" ry="5"/>
+        <path d="M30,5 L28,0 M38,5 L40,0" stroke="#1a0a02" stroke-width="1.5" fill="none"/>
+      </g>
+      <!-- Elephant silhouette -->
+      <g transform="translate(280,120)" fill="#1a0a02">
+        <ellipse cx="40" cy="50" rx="40" ry="32"/>
+        <ellipse cx="70" cy="38" rx="22" ry="18"/>
+        <path d="M78,50 Q90,60 88,75 Q86,85 80,80 Q74,75 76,65 Z"/>
+        <rect x="8" y="76" width="12" height="22" rx="4"/>
+        <rect x="25" y="76" width="12" height="22" rx="4"/>
+        <rect x="43" y="76" width="12" height="22" rx="4"/>
+        <rect x="60" y="76" width="12" height="22" rx="4"/>
+        <ellipse cx="64" cy="30" rx="9" ry="14"/>
+        <ellipse cx="77" cy="30" rx="9" ry="14"/>
+      </g>
+      <!-- Zebra silhouette -->
+      <g transform="translate(1200,130)" fill="#1a0a02">
+        <ellipse cx="35" cy="38" rx="35" ry="22"/>
+        <ellipse cx="58" cy="28" rx="16" ry="14"/>
+        <rect x="10" y="55" width="8" height="20" rx="3"/>
+        <rect x="24" y="55" width="8" height="20" rx="3"/>
+        <rect x="38" y="55" width="8" height="20" rx="3"/>
+        <rect x="52" y="55" width="8" height="20" rx="3"/>
+        <path d="M54,28 L52,18 Q54,15 56,18 L56,28 Z"/>
+        <path d="M52,18 L50,12 M56,18 L58,12" stroke="#1a0a02" stroke-width="1" fill="none"/>
+      </g>
+    </svg>
+  </section>
+
+  <!-- ═══ INFO SECTION ═══ -->
+  <section class="info-section">
+    <p class="section-label">🐾 A expedição começa aqui</p>
+    <h2 class="section-heading">Detalhes do <em>Safari</em></h2>
+
+    <div class="cards-grid">
+      <div class="info-card">
+        <div class="card-icon">🌅</div>
+        <div class="card-label">Data</div>
+        <div class="card-value">15 de Junho</div>
+        <div class="card-sub">Sábado, 2025</div>
+      </div>
+      <div class="info-card">
+        <div class="card-icon">🌞</div>
+        <div class="card-label">Horário</div>
+        <div class="card-value">14h às 18h</div>
+        <div class="card-sub">Pontualidade é lei da selva 🦁</div>
+      </div>
+      <div class="info-card">
+        <div class="card-icon">🗺️</div>
+        <div class="card-label">Local</div>
+        <div class="card-value">Salão Jardim</div>
+        <div class="card-sub">Rua das Flores, 123</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FORM SECTION ═══ -->
+  <section class="form-section">
+    <p class="section-label">🦁 Confirme sua presença</p>
+    <h2 class="section-heading">Junte-se à <em>Manada</em></h2>
+    <p style="text-align:center;color:#7a5838;font-size:14px;margin-top:-30px;margin-bottom:40px;">Confirme até 08 de junho e nos ajude a preparar a savana!</p>
+
+    <div class="counter-wrap">
+      <div class="counter-pill">
+        <span class="num" id="counter">0</span>
+        <span>exploradores confirmados</span> 🐾
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div id="form-wrapper">
+
+        <div class="form-group">
+          <label>Seu nome completo</label>
+          <input type="text" id="name" placeholder="Ex: Maria da Silva"/>
+        </div>
+
+        <div class="form-group">
+          <label>Telefone / WhatsApp</label>
+          <input type="tel" id="phone" placeholder="(11) 99999-9999"/>
+        </div>
+
+        <div class="form-group">
+          <label>Você vai entrar na savana?</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" name="attend" id="yes" value="yes"/>
+              <label for="yes">🦁 Sim, vou rugir!</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="attend" id="no" value="no"/>
+              <label for="no">😢 Não poderei ir</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" id="guests-group" style="display:none;">
+          <label>Quantos exploradores vêm com você?</label>
+          <select id="guests">
+            <option value="1">🦁 Só eu</option>
+            <option value="2">🦁🦁 2 pessoas</option>
+            <option value="3">🦁🦁🦁 3 pessoas</option>
+            <option value="4">4 pessoas</option>
+            <option value="5+">5 ou mais</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Mensagem para a manada (opcional)</label>
+          <textarea id="message" placeholder="Deixe um rugido de carinho para o Miguel e a família 🦁"></textarea>
+        </div>
+
+        <button class="submit-btn" onclick="submitForm()">
+          🐾 Confirmar Presença na Savana
+        </button>
+      </div>
+
+      <div class="success-msg" id="success-msg">
+        <div class="big-emoji">🦁</div>
+        <h2>Bem-vindo à manada!</h2>
+        <p>Uhuuul, <strong id="confirmed-name"></strong>!<br>
+           Sua presença foi confirmada. O Miguel vai rugir de alegria! 🎉<br>
+           Nos vemos na savana! 🌍🐾
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <span>🦁🐘🦒🦓🐆</span><br>
+    Feito com muito amor para o <strong style="color:#c8861a">Chá de Fralda do Miguel</strong>
+  </footer>
+
+  <script>
+    /* ── CURSOR ── */
+    const cur = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cur.style.left = e.clientX + 'px';
+      cur.style.top  = e.clientY + 'px';
+    });
+    document.querySelectorAll('button, a, label, input, select, textarea').forEach(el => {
+      el.addEventListener('mouseenter', () => { cur.style.transform='translate(-50%,-50%) scale(2)'; });
+      el.addEventListener('mouseleave', () => { cur.style.transform='translate(-50%,-50%) scale(1)'; });
+    });
+
+    /* ── FIREFLIES ── */
+    const ff = document.getElementById('fireflies');
+    for (let i = 0; i < 22; i++) {
+      const f = document.createElement('div');
+      f.className = 'fly';
+      const s = Math.random() * 12 + 6;
+      const drift = (Math.random() - 0.5) * 300;
+      f.style.cssText = `
+        width:${s}px; height:${s}px;
+        left:${Math.random()*100}%;
+        --drift:${drift}px;
+        animation-duration:${Math.random()*15+12}s;
+        animation-delay:${Math.random()*15}s;
+        opacity:0;
+      `;
+      ff.appendChild(f);
+    }
+
+    /* ── GUESTS TOGGLE ── */
+    document.querySelectorAll('input[name="attend"]').forEach(r => {
+      r.addEventListener('change', () => {
+        document.getElementById('guests-group').style.display =
+          r.value === 'yes' ? 'block' : 'none';
+      });
+    });
+
+    /* ── PHONE MASK ── */
+    document.getElementById('phone').addEventListener('input', function () {
+      let v = this.value.replace(/\D/g, '').slice(0, 11);
+      if (v.length >= 7)      v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+      else if (v.length >= 3) v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+      this.value = v;
+    });
+
+    /* ── COUNTER ── */
+    let count = parseInt(localStorage.getItem('miguel_africa_count') || '0');
+    document.getElementById('counter').textContent = count;
+
+    /* ── SUBMIT ── */
+    function submitForm() {
+      const name   = document.getElementById('name').value.trim();
+      const phone  = document.getElementById('phone').value.trim();
+      const attend = document.querySelector('input[name="attend"]:checked');
+
+      if (!name)  { shakeEl('name');  return; }
+      if (!phone) { shakeEl('phone'); return; }
+      if (!attend){ alert('Diga-nos se você vai comparecer! 🦁'); return; }
+
+      if (attend.value === 'yes') {
+        count++;
+        localStorage.setItem('miguel_africa_count', count);
+      }
+
+      const entries = JSON.parse(localStorage.getItem('miguel_africa_guests') || '[]');
+      entries.push({
+        name, phone,
+        attend: attend.value,
+        guests: attend.value === 'yes' ? document.getElementById('guests').value : '0',
+        message: document.getElementById('message').value,
+        date: new Date().toLocaleString('pt-BR')
+      });
+      localStorage.setItem('miguel_africa_guests', JSON.stringify(entries));
+
+      document.getElementById('confirmed-name').textContent = name.split(' ')[0];
+      document.getElementById('form-wrapper').style.display = 'none';
+      document.getElementById('success-msg').style.display  = 'block';
+      document.getElementById('counter').textContent = count;
+
+      launchPaws();
+    }
+
+    function shakeEl(id) {
+      const el = document.getElementById(id);
+      el.style.animation = 'none';
+      el.offsetHeight;
+      el.style.animation = 'shake 0.4s ease';
+      el.focus();
+    }
+
+    /* ── PAW CONFETTI ── */
+    const pawEmojis = ['🐾','🦁','🌿','🦒','✨','🌟','🐘'];
+    function launchPaws() {
+      for (let i = 0; i < 50; i++) {
+        const p = document.createElement('div');
+        p.textContent = pawEmojis[Math.floor(Math.random() * pawEmojis.length)];
+        Object.assign(p.style, {
+          position: 'fixed',
+          top: '50%', left: '50%',
+          fontSize: `${Math.random()*20+14}px`,
+          pointerEvents: 'none',
+          zIndex: '99999',
+          userSelect: 'none',
+          transform: 'translate(-50%,-50%)',
+          transition: `transform ${Math.random()*1+0.7}s ease-out, opacity 0.8s ease ${Math.random()*0.5}s`
+        });
+        document.body.appendChild(p);
+        const angle = Math.random() * Math.PI * 2;
+        const dist  = Math.random() * 280 + 80;
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          p.style.transform = `translate(${Math.cos(angle)*dist - 50}%, ${Math.sin(angle)*dist - 50}%)`;
+          p.style.opacity   = '0';
+        }));
+        setTimeout(() => p.remove(), 2000);
+      }
+    }
+  </script>
+
+  <style>
+    @keyframes shake {
+      0%,100% { transform:translateX(0); border-color:#e05a1a !important; }
+      25%      { transform:translateX(-6px); }
+      75%      { transform:translateX(6px); }
+    }
+  </style>
+</body>
+</html>
