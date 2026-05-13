@@ -617,6 +617,24 @@
         <span class="num" id="counter">0</span>
         <span>exploradores confirmados</span> 🐾
       </div>
+      <div style="margin-top:14px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;">
+        <button onclick="exportarCSV()" style="
+          background:linear-gradient(135deg,#2d6a2d,#4a9e4a);
+          color:#fff;border:none;border-radius:20px;
+          padding:8px 18px;font-size:12px;font-weight:700;
+          letter-spacing:1px;cursor:pointer;font-family:'Raleway',sans-serif;
+          box-shadow:0 3px 10px rgba(0,0,0,0.3);">
+          📥 Exportar CSV
+        </button>
+        <button onclick="exportarJSON()" style="
+          background:linear-gradient(135deg,#7a4f1a,#c8861a);
+          color:#fff;border:none;border-radius:20px;
+          padding:8px 18px;font-size:12px;font-weight:700;
+          letter-spacing:1px;cursor:pointer;font-family:'Raleway',sans-serif;
+          box-shadow:0 3px 10px rgba(0,0,0,0.3);">
+          📋 Exportar JSON
+        </button>
+      </div>
     </div>
 
     <div class="form-card">
@@ -731,12 +749,48 @@
       this.value = v;
     });
 
-    /* ── COUNTER ── */
-    let count = parseInt(localStorage.getItem('miguel_africa_count') || '0');
-    document.getElementById('counter').textContent = count;
+    /* ── SUPABASE CONFIG ── */
+    const SUPA_URL = 'https://ovzetspedzxzqavupquv.supabase.co';
+    const SUPA_KEY = 'sb_publishable_TlnbVIiMwmCESVpwY0zBUA_VFXyBdhl';
+
+    const supa = {
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
+
+      async get(tabela, filtro = '') {
+        const res = await fetch(`${SUPA_URL}/rest/v1/${tabela}?${filtro}`, {
+          headers: this.headers
+        });
+        return res.json();
+      },
+
+      async post(tabela, dados) {
+        const res = await fetch(`${SUPA_URL}/rest/v1/${tabela}`, {
+          method: 'POST',
+          headers: this.headers,
+          body: JSON.stringify(dados)
+        });
+        return res.json();
+      }
+    };
+
+    // Carrega contador ao abrir
+    async function carregarContador() {
+      try {
+        const rows = await supa.get('confirmacoes', 'vai_comparecer=eq.yes&select=id');
+        document.getElementById('counter').textContent = rows.length || 0;
+      } catch {
+        document.getElementById('counter').textContent = '0';
+      }
+    }
+    carregarContador();
 
     /* ── SUBMIT ── */
-    function submitForm() {
+    async function submitForm() {
       const name   = document.getElementById('name').value.trim();
       const phone  = document.getElementById('phone').value.trim();
       const attend = document.querySelector('input[name="attend"]:checked');
@@ -745,27 +799,62 @@
       if (!phone) { shakeEl('phone'); return; }
       if (!attend){ alert('Diga-nos se você vai comparecer! 🦁'); return; }
 
-      if (attend.value === 'yes') {
-        count++;
-        localStorage.setItem('miguel_africa_count', count);
+      const btnEl = document.querySelector('.submit-btn');
+      btnEl.disabled = true;
+      btnEl.textContent = 'Enviando...';
+
+      try {
+        await supa.post('confirmacoes', {
+          nome:           name,
+          telefone:       phone,
+          vai_comparecer: attend.value,
+          num_pessoas:    attend.value === 'yes' ? document.getElementById('guests').value : '0',
+          mensagem:       document.getElementById('message').value
+        });
+        await carregarContador();
+      } catch(e) {
+        console.error('Erro ao salvar:', e);
       }
 
-      const entries = JSON.parse(localStorage.getItem('miguel_africa_guests') || '[]');
-      entries.push({
-        name, phone,
-        attend: attend.value,
-        guests: attend.value === 'yes' ? document.getElementById('guests').value : '0',
-        message: document.getElementById('message').value,
-        date: new Date().toLocaleString('pt-BR')
-      });
-      localStorage.setItem('miguel_africa_guests', JSON.stringify(entries));
+      btnEl.disabled = false;
+      btnEl.textContent = 'Confirmar Presença 🦁';
 
       document.getElementById('confirmed-name').textContent = name.split(' ')[0];
       document.getElementById('form-wrapper').style.display = 'none';
       document.getElementById('success-msg').style.display  = 'block';
-      document.getElementById('counter').textContent = count;
 
       launchPaws();
+    }
+
+    /* ── EXPORTAR CSV ── */
+    async function exportarCSV() {
+      const lista = await supa.get('confirmacoes', 'order=created_at.asc');
+      if (!lista.length) { alert('Nenhum convidado registrado ainda!'); return; }
+      const header = ['ID','Nome','Telefone','Vai Comparecer','Nr Pessoas','Mensagem','Data'];
+      const rows = lista.map(e => [
+        e.id, e.nome, e.telefone,
+        e.vai_comparecer === 'yes' ? 'Sim' : 'Nao',
+        e.num_pessoas,
+        '"' + (e.mensagem||'').replace(/"/g, '""') + '"',
+        e.created_at ? new Date(e.created_at).toLocaleString('pt-BR') : ''
+      ]);
+      const csv = [header, ...rows].map(r => r.join(';')).join('\n');
+      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'convidados_miguel.csv';
+      a.click();
+    }
+
+    /* ── EXPORTAR JSON ── */
+    async function exportarJSON() {
+      const lista = await supa.get('confirmacoes', 'order=created_at.asc');
+      if (!lista.length) { alert('Nenhum convidado registrado ainda!'); return; }
+      const blob = new Blob([JSON.stringify(lista, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'convidados_miguel.json';
+      a.click();
     }
 
     function shakeEl(id) {
